@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PoliPlay</title>
   <meta name="description" content="EUROtuur ir izglītojoša galda spēle par ES, politikas procesiem, kultūru un vēsturi. Spēlē un uzzini, kā darbojas Eiropas Savienības institūcijas!" />
-  <meta name="theme-color" content="#113B92" />
+  <meta name="theme-color" content="#0c2f3f" />
+  <meta name="color-scheme" content="dark light" />
 
   <!-- Open Graph / Social -->
   <meta property="og:type" content="website" />
@@ -17,89 +18,177 @@
   <link rel="icon" href="assets/favicon.png" />
   <style>
     :root {
-      --bg: #0B1020;
-      --card: #0f1733;
-      --eublue: #113B92;
-      --euyellow: #FFD400;
-      --text: #E7ECFF;
-      --muted: #AAB7E8;
-      --accent: #2A56D2;
-      --ok: #3ddc97;
-      --danger: #ff6b6b;
-      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      /* Dark teal / bluish palette */
+      --bg: #061622;            /* page background */
+      --card: #0b2233;          /* cards & surfaces */
+      --eublue: #1e5d88;        /* primary accent */
+      --euyellow: #FFD64A;      /* warm highlight */
+      --text: #E8F3FF;          /* main text */
+      --muted: #9AB8D7;         /* secondary text */
+      --accent: #2C8BD2;        /* hover/links accent */
+      --ok: #2BC5B4;            /* success teal */
+      --danger: #FF6B6B;        /* error/caution */
+      --shadow: 0 10px 30px rgba(0, 20, 40, .35);
       --radius: 18px;
+
+      /* Layout helpers */
+      --container-w: 1100px;
+      --container-pad: 92%;
+      --header-h: 64px;
     }
 
     /* Reset */
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Noto Sans", Arial, sans-serif; background: radial-gradient(1200px 800px at 80% -10%, rgba(42,86,210,.25), transparent 60%), radial-gradient(800px 800px at -10% 20%, rgba(17,59,146,.35), transparent 55%), var(--bg); color: var(--text); line-height: 1.55; }
+    html, body { height: 100%; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Noto Sans", Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 80% -10%, rgba(44,139,210,.22), transparent 60%),
+        radial-gradient(800px 800px at -10% 20%, rgba(30,93,136,.28), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
     img { max-width: 100%; height: auto; display: block; }
     a { color: var(--euyellow); text-decoration: none; }
     a:hover { text-decoration: underline; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+    /* Reduce motion if user prefers */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html, body { scroll-behavior: auto; }
+    }
 
     /* Layout */
-    .container { width: min(1100px, 92%); margin: 0 auto; }
+    .container { width: min(var(--container-w), var(--container-pad)); margin: 0 auto; }
     .grid { display: grid; gap: 1.2rem; }
 
     /* Header & Nav */
-    header { position: sticky; top: 0; z-index: 30; backdrop-filter: saturate(1.2) blur(8px); background: color-mix(in oklab, var(--bg) 88%, transparent); border-bottom: 1px solid rgba(255,255,255,.06); }
-    .nav { display: flex; align-items: center; justify-content: space-between; padding: .8rem 0; }
-    .brand { display: flex; gap: .75rem; align-items: center; }
-    .brand img { width: 40px; height: 40px; border-radius: 10px; background: #0002; }
-    .brand h1 { font-size: 1.05rem; margin: 0; letter-spacing: .3px; font-weight: 700; }
+    header {
+      position: sticky; top: 0; z-index: 30;
+      backdrop-filter: saturate(1.2) blur(8px);
+      background: color-mix(in oklab, var(--bg) 88%, transparent);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: .6rem 0; min-height: var(--header-h); }
+    .brand { display: flex; gap: .75rem; align-items: center; min-width: 0; }
+    .brand img { width: 44px; height: 44px; border-radius: 10px; background: #0002; object-fit: cover; }
+    .brand h1 { font-size: 1.08rem; margin: 0; letter-spacing: .3px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .nav-links { display: none; gap: 1rem; align-items: center; }
-    .nav-links a { color: var(--text); opacity: .9; font-weight: 600; }
+    .nav-links a { color: var(--text); opacity: .92; font-weight: 600; padding: .5rem .6rem; border-radius: 10px; }
+    .nav-links a:hover { background: #ffffff10; text-decoration: none; }
     .nav-cta { display: none; }
 
-    .hamburger { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 12px; background: #ffffff10; border: 1px solid #ffffff1a; cursor: pointer; transition: transform .15s ease; }
+    .hamburger {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; border-radius: 12px;
+      background: #ffffff10; border: 1px solid #ffffff1a;
+      cursor: pointer; transition: transform .15s ease;
+    }
     .hamburger:hover { transform: translateY(-1px); }
     .hamburger .bar { width: 20px; height: 2px; background: var(--text); position: relative; border-radius: 2px; }
-    .hamburger .bar::before, .hamburger .bar::after { content: ""; position: absolute; left: 0; width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: transform .2s ease, opacity .2s ease; }
+    .hamburger .bar::before, .hamburger .bar::after {
+      content: ""; position: absolute; left: 0; width: 20px; height: 2px;
+      background: var(--text); border-radius: 2px; transition: transform .2s ease, opacity .2s ease;
+    }
     .hamburger .bar::before { top: -6px; }
     .hamburger .bar::after { top: 6px; }
 
+    /* Desktop show nav links */
+    @media (min-width: 981px) {
+      .nav-links, .nav-cta { display: flex; }
+      .hamburger { display: none; }
+    }
+
     /* Side panel */
-    .sidepanel { position: fixed; inset: 0 0 0 auto; width: min(420px, 92%); background: linear-gradient(180deg, #0f1733, #0C1430); box-shadow: var(--shadow); transform: translateX(105%); transition: transform .25s ease; z-index: 50; border-left: 1px solid #ffffff12; }
+    .sidepanel {
+      position: fixed; inset: 0 0 0 auto; width: min(420px, 92%);
+      background: linear-gradient(180deg, #0d2636, #0C1F2F);
+      box-shadow: var(--shadow); transform: translateX(105%);
+      transition: transform .25s ease; z-index: 50; border-left: 1px solid #ffffff12;
+    }
     .sidepanel.open { transform: translateX(0); }
     .sidepanel header { position: sticky; top: 0; background: transparent; border: none; padding: 1rem; }
-    .sidepanel .close { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: .6rem; color: var(--muted); font-weight: 600; }
-    .sidepanel nav a { display: block; padding: 1rem 1.25rem; color: var(--text); font-weight: 600; border-bottom: 1px solid #ffffff10; }
-    .sidepanel nav a:hover { background: #ffffff07; }
+    .sidepanel .close {
+      all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: .6rem;
+      color: var(--muted); font-weight: 700; padding: .5rem .75rem; border-radius: 10px;
+    }
+    .sidepanel .close:hover { background: #ffffff10; }
+    .sidepanel nav a {
+      display: block; padding: 1rem 1.25rem; color: var(--text); font-weight: 700;
+      border-bottom: 1px solid #ffffff10;
+    }
+    .sidepanel nav a:hover { background: #ffffff0A; text-decoration: none; }
 
     /* Hero */
     .hero { padding: clamp(2rem, 6vw, 5rem) 0; }
     .hero-wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; align-items: center; }
-    .eyebrow { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .6rem; background: #2A56D230; border: 1px solid #2A56D250; color: #cfe0ff; border-radius: 999px; font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .6rem;
+      background: #2C8BD230; border: 1px solid #2C8BD250; color: #d6ebff;
+      border-radius: 999px; font-size: .85rem; font-weight: 800; text-transform: uppercase; letter-spacing: .6px;
+    }
     .hero h2 { font-size: clamp(2rem, 4vw, 3rem); margin: .75rem 0; letter-spacing: .3px; }
-    .lead { color: #d2daf8; font-size: 1.075rem; }
+    .lead { color: #d2e6ff; font-size: 1.075rem; }
 
     .actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.2rem; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; padding: .85rem 1.1rem; border-radius: 14px; font-weight: 700; border: 1px solid transparent; transition: transform .15s ease, box-shadow .15s ease, background .2s ease; cursor: pointer; }
-    .btn-primary { background: linear-gradient(180deg, var(--eublue), #0e2f7b); color: white; box-shadow: 0 8px 18px rgba(17,59,146,.35); }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(17,59,146,.45); }
-    .btn-ghost { background: #ffffff08; color: var(--text); border-color: #ffffff20; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+      padding: .9rem 1.15rem; border-radius: 14px; font-weight: 800;
+      border: 1px solid transparent; transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(180deg, var(--eublue), #134766);
+      color: white; box-shadow: 0 8px 18px rgba(30,93,136,.45);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(30,93,136,.55); }
+    .btn-ghost { background: #ffffff10; color: var(--text); border-color: #ffffff22; }
+    .btn-ghost:hover { background: #ffffff14; }
 
     .hero .art { position: relative; }
-    .hero .art .card { background: linear-gradient(180deg, #131c3c, #0b122a); border: 1px solid #ffffff14; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .hero .art .card {
+      background: linear-gradient(180deg, #11324a, #0b1f2e);
+      border: 1px solid #ffffff14; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+    }
     .hero .art .card img { aspect-ratio: 16/10; object-fit: cover; }
-    .hero .art .badge { position: absolute; right: -10px; top: -10px; background: var(--euyellow); color: #0B1020; padding: .55rem .8rem; border-radius: 12px; font-weight: 900; transform: rotate(8deg); box-shadow: 0 8px 18px rgba(255,212,0,.25); }
+    .hero .art .badge {
+      position: absolute; right: -10px; top: -10px; background: var(--euyellow); color: #061622;
+      padding: .55rem .8rem; border-radius: 12px; font-weight: 900; transform: rotate(8deg);
+      box-shadow: 0 8px 18px rgba(255,214,74,.25);
+    }
 
-    /* Feature cards */
+    /* Section scaffolding */
     .section { padding: clamp(2rem, 5vw, 4rem) 0; }
-    .kicker { color: var(--muted); font-weight: 800; letter-spacing: .6px; text-transform: uppercase; }
+    .kicker { color: var(--muted); font-weight: 900; letter-spacing: .6px; text-transform: uppercase; }
     .sec-title { font-size: clamp(1.4rem, 3.4vw, 2.1rem); margin: .35rem 0 1rem; }
 
+    /* Feature cards */
     .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-    .card { background: linear-gradient(180deg, #111a3a, #0b132b); border: 1px solid #ffffff12; border-radius: var(--radius); padding: 1rem; }
+    .card {
+      background: linear-gradient(180deg, #0f2a3b, #0b2233);
+      border: 1px solid #ffffff12; border-radius: var(--radius); padding: 1rem;
+    }
     .card h3 { margin: .2rem 0 .5rem; }
-    .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .3rem .6rem; border-radius: 999px; border: 1px solid #ffffff1a; color: var(--muted); font-size: .85rem; }
+    .pill {
+      display: inline-flex; align-items: center; gap: .5rem; padding: .3rem .6rem;
+      border-radius: 999px; border: 1px solid #ffffff1a; color: var(--muted); font-size: .85rem; background: #ffffff08;
+    }
 
     /* Media gallery */
     .gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: .6rem; }
-    .gallery figure { margin: 0; position: relative; overflow: hidden; border-radius: 14px; border: 1px solid #ffffff14; background: #0b132b; }
-    .gallery img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; filter: saturate(1.05) contrast(1.02); transition: transform .2s ease; }
+    .gallery figure {
+      margin: 0; position: relative; overflow: hidden; border-radius: 14px; border: 1px solid #ffffff14; background: #0b2233;
+    }
+    .gallery img {
+      width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;
+      filter: saturate(1.05) contrast(1.02); transition: transform .2s ease;
+    }
     .gallery figure:hover img { transform: scale(1.03); }
 
     /* Split */
@@ -110,21 +199,31 @@
 
     /* FAQ */
     .faq { display: grid; gap: .6rem; }
-    details { background: linear-gradient(180deg, #101a3a, #0a1229); border: 1px solid #ffffff12; border-radius: 14px; padding: .9rem 1rem; }
-    summary { cursor: pointer; font-weight: 700; }
+    details {
+      background: linear-gradient(180deg, #0e2940, #0a1f2f);
+      border: 1px solid #ffffff12; border-radius: 14px; padding: .9rem 1rem;
+    }
+    summary { cursor: pointer; font-weight: 800; }
     details[open] summary { color: var(--euyellow); }
 
     /* Footer */
-    footer { border-top: 1px solid #ffffff12; background: linear-gradient(180deg, #0b132b, #0a1022); padding: 2rem 0; color: #c7d2ff; }
+    footer {
+      border-top: 1px solid #ffffff12;
+      background: linear-gradient(180deg, #0b2233, #081826);
+      padding: 2rem 0; color: #cfe6ff;
+    }
     .footgrid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; }
-    .small { color: var(--muted); font-size: .9rem; }
+    .small { color: var(--muted); font-size: .92rem; }
 
     /* Buttons row */
     .cta-row { display: flex; flex-wrap: wrap; gap: .6rem; }
 
     /* Badges */
     .badge-row { display: flex; gap: .5rem; flex-wrap: wrap; }
-    .badge-row .pill { background: #ffffff08; }
+    .badge-row .pill { background: #ffffff10; }
+
+    /* Anchor offset so sticky header doesn't cover anchors */
+    section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
 
     /* Responsive */
     @media (max-width: 980px) {
@@ -134,6 +233,8 @@
     }
     @media (max-width: 640px) {
       .cards { grid-template-columns: 1fr; }
+      .brand img { width: 40px; height: 40px; }
+      .btn { width: 100%; } /* comfy tap targets on mobile */
     }
 
     /* Utility */
@@ -145,6 +246,10 @@
     .mt-4 { margin-top: 2rem; }
     .mb-0 { margin-bottom: 0; }
     .shadow { box-shadow: var(--shadow); }
+    .visually-hidden {
+      position: absolute !important; height: 1px; width: 1px; overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; border: 0; padding: 0; margin: -1px;
+    }
   </style>
 </head>
 <body>
@@ -166,7 +271,7 @@
   <header>
     <div class="container nav" role="navigation" aria-label="Galvenā navigācija">
       <div class="brand">
-        <img src="https://fv9-1.failiem.lv/down.php?i=uu9g4hr6zf&view&n=WhatsApp%20Image%202025-10-29%20at%2010.20.47.jpeg" alt="EUROtuur logotips" />
+        <img src="https://fv9-1.failiem.lv/down.php?i=uu9g4hr6zf&view&n=WhatsApp%20Image%202025-10-29%20at%2010.20.47.jpeg" alt="EUROtuur logotips" loading="eager" fetchpriority="high" />
         <h1>PoliPlay</h1>
       </div>
       <nav class="nav-links" aria-label="Saites">
@@ -205,7 +310,7 @@
       </div>
       <div class="art">
         <div class="card shadow">
-          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="EUROtuur spēles dēlis un kartītes uz galda" />
+          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="EUROtuur spēles dēlis un kartītes uz galda" loading="lazy" decoding="async" />
         </div>
         <div class="badge">Jaunums</div>
       </div>
@@ -275,22 +380,23 @@
       <div class="gallery" role="list">
         <!-- Aizstājiet src ar saviem failiem (assets/...) -->
         <figure style="grid-column: span 6;">
-          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="Spēles dēlis tuvplānā" data-modal>
+          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="Spēles dēlis tuvplānā" data-modal loading="lazy" decoding="async">
         </figure>
         <figure style="grid-column: span 3;">
-          <img src="https://fv9-2.failiem.lv/down.php?i=r256b763fs&view&n=WhatsApp%20Image%202025-10-27%20at%2019.13.04.jpeg" alt="Kartīšu kopa uz galda" data-modal>
+          <img src="https://fv9-2.failiem.lv/down.php?i=r256b763fs&view&n=WhatsApp%20Image%202025-10-27%20at%2019.13.04.jpeg" alt="Kartīšu kopa uz galda" data-modal loading="lazy" decoding="async">
         </figure>
         <figure style="grid-column: span 3;">
-          <img src="https://fv9-1.failiem.lv/down.php?i=yzbnp6g7zk&view&n=WhatsApp%20Image%202025-11-01%20at%2013.12.11.jpeg" alt="Spēlēšanas process ar draugiem" data-modal>
+          <img src="https://fv9-1.failiem.lv/down.php?i=yzbnp6g7zk&view&n=WhatsApp%20Image%202025-11-01%20at%2013.12.11.jpeg" alt="Spēlēšanas process ar draugiem" data-modal loading="lazy" decoding="async">
         </figure>
         <figure style="grid-column: span 4;">
-          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="ES institūciju kartītes" data-modal>
+          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="ES institūciju kartītes" data-modal loading="lazy" decoding="async">
         </figure>
         <figure style="grid-column: span 4;">
-          <img src="https://fv9-2.failiem.lv/down.php?i=r256b763fs&view&n=WhatsApp%20Image%202025-10-27%20at%2019.13.04.jpeg" alt="Spēles kastes saturs" data-modal>
+          <img src="https://fv9-2.failiem.lv/down.php?i=r256b763fs&view&n=WhatsApp%20Image%202025-10-27%20at%2019.13.04.jpeg" alt="Spēles kastes saturs" data-modal loading="lazy" decoding="async">
         </figure>
         <figure style="grid-column: span 4; aspect-ratio: 16/9;">
-          <video controls poster="assets/video-cover.jpg" style="width:100%; height:100%; object-fit:cover; display:block; border-radius:14px;">
+          <!-- Piezīme: pašlaik avots ir lokāls ceļš. Publicēšanai aizstājiet ar publisku URL (YouTube/Faileim.lv u.c.). -->
+          <video controls preload="metadata" poster="assets/video-cover.jpg" style="width:100%; height:100%; object-fit:cover; display:block; border-radius:14px;">
             <source src="C:\Users\meteo\MeteoLatvia\Coding\web\website\poliplay\25-09-2025-0738.mp4" type="video/mp4" />
             Jūsu pārlūks neatbalsta video atskaņošanu.
           </video>
@@ -355,7 +461,7 @@
     <div class="container footgrid">
       <div>
         <div class="brand">
-          <img src="https://fv9-1.failiem.lv/down.php?i=uu9g4hr6zf&view&n=WhatsApp%20Image%202025-10-29%20at%2010.20.47.jpeg" alt="EUROtuur logotips" />
+          <img src="https://fv9-1.failiem.lv/down.php?i=uu9g4hr6zf&view&n=WhatsApp%20Image%202025-10-29%20at%2010.20.47.jpeg" alt="EUROtuur logotips" loading="lazy" decoding="async" />
           <h1>PoliPlay</h1>
         </div>
         <p class="small mt-2">“EUROtuur” — galda spēle, kas palīdz izprast politiku, atklāt Eiropas kultūru un vēsturi, kā arī saprast ES institūcijas.</p>
@@ -363,11 +469,11 @@
       </div>
       <div>
         <h3>Saziņa</h3>
-        <p class="small">E-pasts: <a href="mailto:info@jusu-domeins.lv">info@poliplay.lv</a></p>
+        <p class="small">E-pasts: <a href="mailto:info@poliplay.lv">info@poliplay.lv</a></p>
         <p class="small">Seko jaunumiem: 
-          <a href="#" aria-label="X/Twitter">X</a> · 
-          <a href="#" aria-label="Instagram">Instagram</a> · 
-          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="#" aria-label="X/Twitter" rel="noopener">X</a> · 
+          <a href="#" aria-label="Instagram" rel="noopener">Instagram</a> · 
+          <a href="#" aria-label="Facebook" rel="noopener">Facebook</a>
         </p>
       </div>
     </div>
@@ -399,14 +505,24 @@
       sidepanel.setAttribute('aria-hidden', 'true');
     });
 
-    // Smooth scroll for internal links
+    // Close sidepanel with Escape or when a link is clicked
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidepanel.classList.contains('open')) {
+        sidepanel.classList.remove('open');
+        openPanel.setAttribute('aria-expanded', 'false');
+        sidepanel.setAttribute('aria-hidden', 'true');
+      }
+      if (e.key === 'Escape' && modal?.open) modal.close();
+    });
+
+    // Smooth scroll for internal links & auto-close panel on navigation
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
         const id = a.getAttribute('href');
         const target = id && document.querySelector(id);
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           sidepanel.classList.remove('open');
           openPanel.setAttribute('aria-expanded', 'false');
           sidepanel.setAttribute('aria-hidden', 'true');
@@ -442,14 +558,10 @@
       if (e.target === modal) modal.close();
     });
 
-    // Basic accessibility improvements for keyboard users
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && sidepanel.classList.contains('open')) {
-        sidepanel.classList.remove('open');
-        openPanel.setAttribute('aria-expanded', 'false');
-        sidepanel.setAttribute('aria-hidden', 'true');
-      }
-      if (e.key === 'Escape' && modal.open) modal.close();
+    // Improve video keyboard focus outline on play
+    document.querySelectorAll('video').forEach(v => {
+      v.addEventListener('focus', () => v.style.outline = '2px solid var(--accent)');
+      v.addEventListener('blur', () => v.style.outline = 'none');
     });
   </script>
 </body>
