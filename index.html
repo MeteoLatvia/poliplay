@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EUROtuur — galda spēle par Eiropu un politiku</title>
+  <meta name="description" content="EUROtuur ir izglītojoša galda spēle par ES, politikas procesiem, kultūru un vēsturi. Spēlē un uzzini, kā darbojas Eiropas Savienības institūcijas!" />
+  <meta name="theme-color" content="#113B92" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="EUROtuur — izglītojoša galda spēle par Eiropu" />
+  <meta property="og:description" content="Spēlē un uzzini, kā darbojas ES institūcijas, atklāj Eiropas kultūru un vēsturi." />
+  <meta property="og:image" content="assets/og-image.jpg" />
+  <meta property="og:locale" content="lv_LV" />
+  
+  <link rel="icon" href="assets/favicon.png" />
+  <style>
+    :root {
+      --bg: #0B1020;
+      --card: #0f1733;
+      --eublue: #113B92;
+      --euyellow: #FFD400;
+      --text: #E7ECFF;
+      --muted: #AAB7E8;
+      --accent: #2A56D2;
+      --ok: #3ddc97;
+      --danger: #ff6b6b;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --radius: 18px;
+    }
+
+    /* Reset */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Noto Sans", Arial, sans-serif; background: radial-gradient(1200px 800px at 80% -10%, rgba(42,86,210,.25), transparent 60%), radial-gradient(800px 800px at -10% 20%, rgba(17,59,146,.35), transparent 55%), var(--bg); color: var(--text); line-height: 1.55; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--euyellow); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Layout */
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+    .grid { display: grid; gap: 1.2rem; }
+
+    /* Header & Nav */
+    header { position: sticky; top: 0; z-index: 30; backdrop-filter: saturate(1.2) blur(8px); background: color-mix(in oklab, var(--bg) 88%, transparent); border-bottom: 1px solid rgba(255,255,255,.06); }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: .8rem 0; }
+    .brand { display: flex; gap: .75rem; align-items: center; }
+    .brand img { width: 40px; height: 40px; border-radius: 10px; background: #0002; }
+    .brand h1 { font-size: 1.05rem; margin: 0; letter-spacing: .3px; font-weight: 700; }
+
+    .nav-links { display: none; gap: 1rem; align-items: center; }
+    .nav-links a { color: var(--text); opacity: .9; font-weight: 600; }
+    .nav-cta { display: none; }
+
+    .hamburger { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 12px; background: #ffffff10; border: 1px solid #ffffff1a; cursor: pointer; transition: transform .15s ease; }
+    .hamburger:hover { transform: translateY(-1px); }
+    .hamburger .bar { width: 20px; height: 2px; background: var(--text); position: relative; border-radius: 2px; }
+    .hamburger .bar::before, .hamburger .bar::after { content: ""; position: absolute; left: 0; width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: transform .2s ease, opacity .2s ease; }
+    .hamburger .bar::before { top: -6px; }
+    .hamburger .bar::after { top: 6px; }
+
+    /* Side panel */
+    .sidepanel { position: fixed; inset: 0 0 0 auto; width: min(420px, 92%); background: linear-gradient(180deg, #0f1733, #0C1430); box-shadow: var(--shadow); transform: translateX(105%); transition: transform .25s ease; z-index: 50; border-left: 1px solid #ffffff12; }
+    .sidepanel.open { transform: translateX(0); }
+    .sidepanel header { position: sticky; top: 0; background: transparent; border: none; padding: 1rem; }
+    .sidepanel .close { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: .6rem; color: var(--muted); font-weight: 600; }
+    .sidepanel nav a { display: block; padding: 1rem 1.25rem; color: var(--text); font-weight: 600; border-bottom: 1px solid #ffffff10; }
+    .sidepanel nav a:hover { background: #ffffff07; }
+
+    /* Hero */
+    .hero { padding: clamp(2rem, 6vw, 5rem) 0; }
+    .hero-wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .6rem; background: #2A56D230; border: 1px solid #2A56D250; color: #cfe0ff; border-radius: 999px; font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
+    .hero h2 { font-size: clamp(2rem, 4vw, 3rem); margin: .75rem 0; letter-spacing: .3px; }
+    .lead { color: #d2daf8; font-size: 1.075rem; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.2rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; padding: .85rem 1.1rem; border-radius: 14px; font-weight: 700; border: 1px solid transparent; transition: transform .15s ease, box-shadow .15s ease, background .2s ease; cursor: pointer; }
+    .btn-primary { background: linear-gradient(180deg, var(--eublue), #0e2f7b); color: white; box-shadow: 0 8px 18px rgba(17,59,146,.35); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(17,59,146,.45); }
+    .btn-ghost { background: #ffffff08; color: var(--text); border-color: #ffffff20; }
+
+    .hero .art { position: relative; }
+    .hero .art .card { background: linear-gradient(180deg, #131c3c, #0b122a); border: 1px solid #ffffff14; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .hero .art .card img { aspect-ratio: 16/10; object-fit: cover; }
+    .hero .art .badge { position: absolute; right: -10px; top: -10px; background: var(--euyellow); color: #0B1020; padding: .55rem .8rem; border-radius: 12px; font-weight: 900; transform: rotate(8deg); box-shadow: 0 8px 18px rgba(255,212,0,.25); }
+
+    /* Feature cards */
+    .section { padding: clamp(2rem, 5vw, 4rem) 0; }
+    .kicker { color: var(--muted); font-weight: 800; letter-spacing: .6px; text-transform: uppercase; }
+    .sec-title { font-size: clamp(1.4rem, 3.4vw, 2.1rem); margin: .35rem 0 1rem; }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .card { background: linear-gradient(180deg, #111a3a, #0b132b); border: 1px solid #ffffff12; border-radius: var(--radius); padding: 1rem; }
+    .card h3 { margin: .2rem 0 .5rem; }
+    .pill { display: inline-flex; align-items: center; gap: .5rem; padding: .3rem .6rem; border-radius: 999px; border: 1px solid #ffffff1a; color: var(--muted); font-size: .85rem; }
+
+    /* Media gallery */
+    .gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: .6rem; }
+    .gallery figure { margin: 0; position: relative; overflow: hidden; border-radius: 14px; border: 1px solid #ffffff14; background: #0b132b; }
+    .gallery img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; filter: saturate(1.05) contrast(1.02); transition: transform .2s ease; }
+    .gallery figure:hover img { transform: scale(1.03); }
+
+    /* Split */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+    .check { display: grid; gap: .4rem; }
+    .check li { list-style: none; position: relative; padding-left: 1.6rem; }
+    .check li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--ok); font-weight: 900; }
+
+    /* FAQ */
+    .faq { display: grid; gap: .6rem; }
+    details { background: linear-gradient(180deg, #101a3a, #0a1229); border: 1px solid #ffffff12; border-radius: 14px; padding: .9rem 1rem; }
+    summary { cursor: pointer; font-weight: 700; }
+    details[open] summary { color: var(--euyellow); }
+
+    /* Footer */
+    footer { border-top: 1px solid #ffffff12; background: linear-gradient(180deg, #0b132b, #0a1022); padding: 2rem 0; color: #c7d2ff; }
+    .footgrid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; }
+    .small { color: var(--muted); font-size: .9rem; }
+
+    /* Buttons row */
+    .cta-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+
+    /* Badges */
+    .badge-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .badge-row .pill { background: #ffffff08; }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .hero-wrap, .split, .footgrid { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .nav-links, .nav-cta { display: none !important; }
+    }
+    @media (max-width: 640px) {
+      .cards { grid-template-columns: 1fr; }
+    }
+
+    /* Utility */
+    .muted { color: var(--muted); }
+    .center { text-align: center; }
+    .mt-1 { margin-top: .5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mt-4 { margin-top: 2rem; }
+    .mb-0 { margin-bottom: 0; }
+    .shadow { box-shadow: var(--shadow); }
+  </style>
+</head>
+<body>
+  <!-- Side panel navigation -->
+  <aside class="sidepanel" id="sidepanel" aria-hidden="true" aria-label="Sānu izvēlne">
+    <header class="container">
+      <button class="close" id="closePanel" aria-label="Aizvērt izvēlni">✕ Aizvērt</button>
+    </header>
+    <nav>
+      <a href="#spele">Par spēli</a>
+      <a href="#kads-ieguvums">Ko iemācīsies</a>
+      <a href="#galerija">Multivide</a>
+      <a href="#faq">BUJ</a>
+      <a href="#pirkt">Kur iegādāties</a>
+    </nav>
+  </aside>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Galvenā navigācija">
+      <div class="brand">
+        <img src="https://fv9-1.failiem.lv/down.php?i=uu9g4hr6zf&view&n=WhatsApp%20Image%202025-10-29%20at%2010.20.47.jpeg" alt="EUROtuur logotips" />
+        <h1>EUROtuur</h1>
+      </div>
+      <nav class="nav-links" aria-label="Saites">
+        <a href="#spele">Par spēli</a>
+        <a href="#kads-ieguvums">Ko iemācīsies</a>
+        <a href="#galerija">Multivide</a>
+        <a href="#faq">BUJ</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-primary" href="#pirkt">Iegādāties</a>
+      </div>
+      <button class="hamburger" id="openPanel" aria-label="Atvērt izvēlni" aria-controls="sidepanel" aria-expanded="false">
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <span class="eyebrow">Izglītojoša galda spēle par Eiropu</span>
+        <h2>Pavadi draugus <em>EUROtūrē</em> un atklāj, kā patiesībā strādā ES.</h2>
+        <p class="lead">“EUROtuur” sniedz iespēju izprast politikas procesus, iepazīt Eiropas kultūras un vēstures daudzveidību un labāk saprast, kā funkcionē ES institūcijas — jautri, interaktīvi un godīgi.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#pirkt">Iegādāties / iepriekšpirkums</a>
+          <a class="btn btn-ghost" href="#galerija">Apskatīt multividi</a>
+          <a class="btn btn-ghost" href="assets/noteikumi.pdf" target="_blank" rel="noopener">Lejupielādēt noteikumus (PDF)</a>
+        </div>
+        <div class="badge-row mt-2" aria-hidden="true">
+          <span class="pill">🇪🇺 ES institūcijas</span>
+          <span class="pill">🎲 2–6 spēlētāji</span>
+          <span class="pill">⏱️ 30–60 min.</span>
+          <span class="pill">👥 12+ gadi</span>
+        </div>
+      </div>
+      <div class="art">
+        <div class="card shadow">
+          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="EUROtuur spēles dēlis un kartītes uz galda" />
+        </div>
+        <div class="badge">Jaunums</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features / about the game -->
+  <section id="spele" class="section">
+    <div class="container">
+      <p class="kicker">Kas ir EUROtuur?</p>
+      <h2 class="sec-title">Spēle, kas apvieno politiku, kultūru un stratēģiju.</h2>
+      <div class="cards">
+        <article class="card">
+          <span class="pill">Politikas procesi</span>
+          <h3>Iepazīsti lēmumu pieņemšanu</h3>
+          <p>Kā top tiesību akti? Kas ir Komisijas, Parlamenta un Padomes loma? Spēles mehānikas imitē reālus procesus, padarot tos saprotamus ikvienam.</p>
+        </article>
+        <article class="card">
+          <span class="pill">Kultūra un vēsture</span>
+          <h3>Eiropas daudzveidība vienā spēlē</h3>
+          <p>Uzzini par valstīm, pilsētām un vēsturiskiem notikumiem, atbildot uz tematiskiem uzdevumiem un ceļojot pa Eiropas karti.</p>
+        </article>
+        <article class="card">
+          <span class="pill">Mācīties spēlējot</span>
+          <h3>Skolām, ģimenēm un draugiem</h3>
+          <p>EUROtuur ir lieliski izmantojams mācību stundās un neformālās sarunās — veicina kritisko domāšanu, sadarbību un medijpratību.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Learning outcomes -->
+  <section id="kads-ieguvums" class="section">
+    <div class="container split">
+      <div>
+        <p class="kicker">Ko iemācīsies</p>
+        <h2 class="sec-title">Labāk izpratīsi ES un sajutīsi Eiropu tuvāk.</h2>
+        <ul class="check">
+          <li>ES institūciju funkcijas: Komisija, Parlaments, Padome, EST u.c.</li>
+          <li>Likumu tapšanas posmi un kompromisu nozīme.</li>
+          <li>Kultūras un vēstures fakti no visas Eiropas.</li>
+          <li>Sadarbības, stratēģijas un argumentācijas prasmes.</li>
+        </ul>
+        <div class="actions mt-2">
+          <a class="btn btn-primary" href="#pirkt">Sākt EUROtūri</a>
+          <a class="btn btn-ghost" href="#faq">Uzdot jautājumu</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="mb-0">Kas ir kastē?</h3>
+        <p class="muted mt-1">Komplekts var atšķirties atkarībā no tirgus/valodas.</p>
+        <ul class="check mt-2">
+          <li>Spēles dēlis ar Eiropas karti</li>
+          <li>200+ uzdevumu un faktu kartītes</li>
+          <li>ES institūciju un procesu kartītes</li>
+          <li>Kauliņi, žetoni, noteikumu buklets</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Media gallery -->
+  <section id="galerija" class="section">
+    <div class="container">
+      <p class="kicker">Multivide</p>
+      <h2 class="sec-title">Apskati EUROtuur attēlos un video.</h2>
+      <div class="gallery" role="list">
+        <!-- Aizstājiet src ar saviem failiem (assets/...) -->
+        <figure style="grid-column: span 6;">
+          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="Spēles dēlis tuvplānā" data-modal>
+        </figure>
+        <figure style="grid-column: span 3;">
+          <img src="https://fv9-2.failiem.lv/down.php?i=r256b763fs&view&n=WhatsApp%20Image%202025-10-27%20at%2019.13.04.jpeg" alt="Kartīšu kopa uz galda" data-modal>
+        </figure>
+        <figure style="grid-column: span 3;">
+          <img src="https://fv9-1.failiem.lv/down.php?i=yzbnp6g7zk&view&n=WhatsApp%20Image%202025-11-01%20at%2013.12.11.jpeg" alt="Spēlēšanas process ar draugiem" data-modal>
+        </figure>
+        <figure style="grid-column: span 4;">
+          <img src="https://fv9-2.failiem.lv/down.php?i=shm9vek47m&view&n=Screenshot%202025-11-01%20210855.png" alt="ES institūciju kartītes" data-modal>
+        </figure>
+        <figure style="grid-column: span 4;">
+          <img src="https://fv9-2.failiem.lv/down.php?i=r256b763fs&view&n=WhatsApp%20Image%202025-10-27%20at%2019.13.04.jpeg" alt="Spēles kastes saturs" data-modal>
+        </figure>
+        <figure style="grid-column: span 4; aspect-ratio: 16/9;">
+          <video controls poster="assets/video-cover.jpg" style="width:100%; height:100%; object-fit:cover; display:block; border-radius:14px;">
+            <source src="C:\Users\meteo\MeteoLatvia\Coding\web\website\poliplay\25-09-2025-0738.mp4" type="video/mp4" />
+            Jūsu pārlūks neatbalsta video atskaņošanu.
+          </video>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Purchase / CTA -->
+  <section id="pirkt" class="section">
+    <div class="container split">
+      <div class="card">
+        <h3>Iegāde un pieejamība</h3>
+        <p>EUROtuur ir pieejams latviešu valodā. Lai pasūtītu vai uzzinātu par iepriekšpirkumu, raksti mums vai seko jaunumiem.</p>
+        <div class="cta-row mt-2">
+          <a class="btn btn-primary" href="mailto:info@jusu-domeins.lv?subject=EUROtuur%20pas%C5%ABt%C4%ABjums">Rakstīt par pasūtījumu</a>
+          <a class="btn btn-ghost" href="https://github.com/" target="_blank" rel="noopener">GitHub projekts</a>
+        </div>
+        <p class="small mt-2">* Norādiet gala cenu, piegādes un maksājuma nosacījumus, tiklīdz tie ir pieejami.</p>
+      </div>
+      <div class="card">
+        <h3>Jaunumu vēstule</h3>
+        <p>Piesakies, lai saņemtu ziņas par izdošanu, demo pasākumiem un mācību materiāliem.</p>
+        <form id="newsletter" class="grid" aria-label="Jaunumu pieraksts" onsubmit="return false;">
+          <label class="small" for="email">E-pasts</label>
+          <input id="email" name="email" type="email" required placeholder="jums@epasts.lv" style="padding:.9rem 1rem; border-radius:12px; border:1px solid #ffffff22; background:#ffffff08; color:var(--text)" />
+          <button id="signup" class="btn btn-primary" type="submit">Pieteikties</button>
+          <p id="note" class="muted" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <p class="kicker">BUJ</p>
+      <h2 class="sec-title">Biežāk uzdotie jautājumi</h2>
+      <div class="faq">
+        <details>
+          <summary>Cik ilgi ilgst viena partija?</summary>
+          <p>Parasti 30–60 minūtes atkarībā no spēlētāju skaita un izvēlētā noteikumu varianta.</p>
+        </details>
+        <details>
+          <summary>No kāda vecuma ieteicams?</summary>
+          <p>Ieteicams no 12 gadu vecuma. Ar pieaugušo palīdzību var spēlēt arī jaunāki.</p>
+        </details>
+        <details>
+          <summary>Vai spēle der skolām?</summary>
+          <p>Jā. Spēle ir lielisks palīglīdzeklis sociālajās zinībās, vēsturē un politikas mācībās. Pieejami bezmaksas mācību materiāli.</p>
+        </details>
+        <details>
+          <summary>Vai var spēlēt latviešu valodā?</summary>
+          <p>Jā. Pašlaik piedāvājam latviešu valodas versiju. Vēlāk plānojam arī citas valodas.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footgrid">
+      <div>
+        <div class="brand">
+          <img src="https://fv9-1.failiem.lv/down.php?i=uu9g4hr6zf&view&n=WhatsApp%20Image%202025-10-29%20at%2010.20.47.jpeg" alt="EUROtuur logotips" />
+          <h1>EUROtuur</h1>
+        </div>
+        <p class="small mt-2">“EUROtuur” — galda spēle, kas palīdz izprast politiku, atklāt Eiropas kultūru un vēsturi, kā arī saprast ES institūcijas.</p>
+        <p class="small">© <span id="year"></span> EUROtuur. Visas tiesības aizsargātas.</p>
+      </div>
+      <div>
+        <h3>Saziņa</h3>
+        <p class="small">E-pasts: <a href="mailto:info@jusu-domeins.lv">info@jusu-domeins.lv</a></p>
+        <p class="small">Seko jaunumiem: 
+          <a href="#" aria-label="X/Twitter">X</a> · 
+          <a href="#" aria-label="Instagram">Instagram</a> · 
+          <a href="#" aria-label="Facebook">Facebook</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal for gallery images -->
+  <dialog id="modal" style="border:none; padding:0; background:transparent;">
+    <div style="position:fixed; inset:0; background:rgba(0,0,20,.8); display:grid; place-items:center;">
+      <figure style="width:min(1000px,92%); margin:0;">
+        <img id="modalImg" alt="Galerijas attēls pilnekrānā" style="width:100%; height:auto; border-radius:16px; border:1px solid #ffffff22;" />
+        <figcaption class="small center mt-1">Klikšķini ārpus attēla, lai aizvērtu</figcaption>
+      </figure>
+    </div>
+  </dialog>
+
+  <script>
+    // Sticky nav sidepanel
+    const sidepanel = document.getElementById('sidepanel');
+    const openPanel = document.getElementById('openPanel');
+    const closePanel = document.getElementById('closePanel');
+    openPanel?.addEventListener('click', () => {
+      sidepanel.classList.add('open');
+      openPanel.setAttribute('aria-expanded', 'true');
+      sidepanel.setAttribute('aria-hidden', 'false');
+    });
+    closePanel?.addEventListener('click', () => {
+      sidepanel.classList.remove('open');
+      openPanel.setAttribute('aria-expanded', 'false');
+      sidepanel.setAttribute('aria-hidden', 'true');
+    });
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        const target = id && document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+          sidepanel.classList.remove('open');
+          openPanel.setAttribute('aria-expanded', 'false');
+          sidepanel.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+
+    // Year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Newsletter (demo only)
+    const form = document.getElementById('newsletter');
+    const note = document.getElementById('note');
+    form?.addEventListener('submit', () => {
+      const email = document.getElementById('email').value.trim();
+      if (!email) return;
+      // Šeit var integrēt Formspree/EmailJS vai savu backend.
+      note.textContent = 'Paldies! Mēs piefiksējām jūsu e-pastu.';
+      setTimeout(() => note.textContent = '', 5000);
+      form.reset();
+    });
+
+    // Gallery modal
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    document.querySelectorAll('[data-modal]').forEach(img => {
+      img.addEventListener('click', () => {
+        modalImg.src = img.src;
+        modal.showModal();
+      });
+    });
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) modal.close();
+    });
+
+    // Basic accessibility improvements for keyboard users
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidepanel.classList.contains('open')) {
+        sidepanel.classList.remove('open');
+        openPanel.setAttribute('aria-expanded', 'false');
+        sidepanel.setAttribute('aria-hidden', 'true');
+      }
+      if (e.key === 'Escape' && modal.open) modal.close();
+    });
+  </script>
+</body>
+</html>
